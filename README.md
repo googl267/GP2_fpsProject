@@ -91,8 +91,12 @@
   - Run ` notepad  $PROFILE `
   - Add "oh-my-posh --init --shell pwsh --config C:/Code/powershell.json | Invoke-Expression"
   - Run ` Import-Module posh-git ` and ` Add-PoshGitToProfile `
+</details>
 
-  - Setup your git ` git config --global user.email "YOUR EMAIL" ` and ` git config --global user.name "YOUR NAME" `
+<details close> 
+  <summary><h3>Git Setup Directions</h3></summary>
+  
+  - Setup your git run ` git config --global user.email "YOUR EMAIL" ` and ` git config --global user.name "YOUR NAME" `
   - Create a ` GitHub ` folder in Documents
   - Run ` cd ~/Documents/GitHub `
   - Run ` git clone https://github.com/googl267/GP2_fpsProject.git `
