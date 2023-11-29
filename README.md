@@ -111,5 +111,5 @@
   
   - Make sure your in your project directory on the right branch
   - To sync run ` git pull `
-  - To commit run ` git add * | git commit | git push origin testing `
+  - To commit run ` git add * | git commit -m "YOUR MESSAGE" | git push origin testing `
 </details>
