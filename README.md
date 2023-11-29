@@ -79,6 +79,7 @@
   <summary><h3>Powershell Directions</h3></summary>
   
   - Install Windows Terminal from microsoft store
+  - Install a nerd font (https://www.nerdfonts.com/font-downloads)
   - Run ` winget install JanDeDobbeleer.OhMyPosh `
   - Run ` winget install --id Git.Git -e --source winget `
   - Restart terminal
@@ -86,8 +87,25 @@
   - Run ` New-Item -path $profile -type file -force `
   - Run ` New-Item -path C:/Code/powershell.json -type file -force `
   - Run ` notepad C:/Code/powershell.json `
-  - Paste contents of powersell.json inside this folder
+  - Paste contents of powersell.json inside this file
   - Run ` notepad  $PROFILE `
   - Add "oh-my-posh --init --shell pwsh --config C:/Code/powershell.json | Invoke-Expression"
   - Run ` Import-Module posh-git ` and ` Add-PoshGitToProfile `
+
+  - Setup your git ` git config --global user.email "YOUR EMAIL" ` and ` git config --global user.name "YOUR NAME" `
+  - Create a ` GitHub ` folder in Documents
+  - Run ` cd ~/Documents/GitHub `
+  - Run ` git clone https://github.com/googl267/GP2_fpsProject.git `
+  - Run ` cd GP2_fpsProject.git `
+  - Run ` git remote set-url origin https://github.com/googl267/GP2_fpsProject.git `
+  - Run ` git checkout testing `
+  - Run ` git pull `
+</details>
+
+<details open> 
+  <summary><h3>Using Git</h3></summary>
+  
+  - Make sure your in your project directory on the right branch
+  - To sync run ` git pull `
+  - To commit run ` git add * | git commit | git push origin testing `
 </details>
