@@ -1,0 +1,104 @@
+{
+  "$schema": "https://raw.githubusercontent.com/JanDeDobbeleer/oh-my-posh/main/themes/schema.json",
+  "final_space": true,
+  "version": 2,
+  "blocks": [
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "path",
+          "style": "diamond",
+          "leading_diamond": "\ue0b6",
+          "foreground": "#a6adc8",
+          "background": "#313244",
+          "properties": {
+            "style": "folder"
+          },
+          "template": " {{if eq .Path \"~\"}}\uf114 {{.UserName}}{{else}}\uf114 {{.Path}}{{end}} {{if not (.Segments.Contains \"git\")}}<#313244,transparent>\ue0b4</>{{end}}"
+        },
+        {
+          "alias": "git",
+          "type": "git",
+          "style": "powerline",
+          "powerline_symbol": "\ue0b4",
+          "foreground": "#181825",
+          "background": "#a6e3a1",
+          "background_templates": [
+            "{{if or .Working.Changed .Staging.Changed}}#a6e3a1{{end}}",
+            "{{if and gt .Ahead 0 gt .Behind 0}}#a6e3a1{{end}}",
+            "{{if gt .Ahead 0}}#a6e3a1{{end}}",
+            "{{if gt .Behind 0}}#a6e3a1{{end}}"
+          ],
+          "properties": {
+            "branch_max_length": 20,
+            "fetch_stash_count": true,
+            "fetch_status": true,
+            "fetch_upstream_icon": true,
+            "git_icon": "\uf7a1",
+            "github_icon": "\ueba1",
+            "branch_icon": "\ue725 ",
+            "commit_icon": "\ue729 ",
+            "tag_icon": "\uf9fb ",
+            "rebase_icon": "\ue728 ",
+            "merge_icon": "\ue727 ",
+            "revert_icon": "\uf964 ",
+            "no_commits_icon": "\uf595 "
+          },
+          "template": " {{if .UpstreamIcon}}{{.UpstreamIcon}} | {{else}}\uf7a1 | {{end}}{{.HEAD}} | {{if .BranchStatus}}{{.BranchStatus}}{{end}}{{if .Working.Changed}} | \uf044 {{.Working.String}}{{end}}{{if .Staging.Changed}} | \uf046 {{.Staging.String}}{{end}}{{if gt .StashCount 0}} | \uf692 {{.StashCount}}{{end}} "
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "right",
+      "segments": [
+        {
+          "alias": "root",
+          "type": "root",
+          "style": "powerline",
+          "powerline_symbol": "\ue0b6",
+          "invert_powerline": true,
+          "foreground": "#a6adc8",
+          "background": "#313244",
+          "template": " \u2665  "
+        },
+        {
+          "type": "time",
+          "style": "diamond",
+          "trailing_diamond": "\ue0b4",
+          "invert_powerline": true,
+          "foreground": "#a6adc8",
+          "background": "#313244",   
+          "properties": {
+            "time_format": "04:05"
+          },
+          "template": "{{if not (.Segments.Contains \"root\")}}<#313244,transparent>\ue0b6</>{{end}} \uf43a {{.CurrentDate | date .Format}} "
+        }
+      ]
+    },
+    {
+      "type": "prompt",
+      "alignment": "left",
+      "newline": true,
+      "segments": [
+        {
+          "type": "text", 
+          "style": "plain",
+          "foreground": "#f5e0dc",
+          "template": "\u2771"
+        }
+      ]
+    }
+  ],
+  "transient_prompt": {
+    "foreground": "#eba0ac",
+    "template": "\uf105 "  
+  },
+  "secondary_prompt": {
+    "foreground": "#a6adc8",
+    "template": "\u276f "
+  }
+}

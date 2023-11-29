@@ -74,3 +74,20 @@
   - [ ] Harder Enemys with progression
   - [ ] Weapon Variety
 </details>
+
+<details close> 
+  <summary><h3>Powershell Directions</h3></summary>
+  
+  - Install Windows Terminal from microsoft store
+  - Run ` winget install JanDeDobbeleer.OhMyPosh `
+  - Run ` winget install --id Git.Git -e --source winget `
+  - Restart terminal
+  - Run ` PowerShellGet\Install-Module posh-git -Scope CurrentUser -Force `
+  - Run ` New-Item -path $profile -type file -force `
+  - Run ` New-Item -path C:/Code/powershell.json -type file -force `
+  - Run ` notepad C:/Code/powershell.json `
+  - Paste contents of powersell.json inside this folder
+  - Run ` notepad  $PROFILE `
+  - Add "oh-my-posh --init --shell pwsh --config C:/Code/powershell.json | Invoke-Expression"
+  - Run ` Import-Module posh-git ` and ` Add-PoshGitToProfile `
+</details>
