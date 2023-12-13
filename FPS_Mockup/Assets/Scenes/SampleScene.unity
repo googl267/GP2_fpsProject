@@ -203,7 +203,7 @@ MonoBehaviour:
   controller: {fileID: 430028779}
   speed: 8
   walk: 8
-  sprint: 2
+  sprint: 14
   gravity: -58.86
   jumpHeight: 3
   groundCheck: {fileID: 2143435897}
@@ -211,6 +211,8 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  fovCurrent: 0
+  fovDefault: 0
 --- !u!143 &430028779
 CharacterController:
   m_ObjectHideFlags: 0
