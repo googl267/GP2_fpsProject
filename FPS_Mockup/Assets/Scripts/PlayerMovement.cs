@@ -18,9 +18,10 @@ public class PlayerMovement : MonoBehaviour
 
     Vector3 velocity;
     bool isGrounded;
+    bool isAiming;
 
-    public float fovCurrent;
-    public float fovDefault;
+    private float fovDefault;
+    public float fovAim = 45f;
     private float fovSprint;
 
     void Start()
@@ -35,7 +36,6 @@ public class PlayerMovement : MonoBehaviour
     void Update()
     {
         isGrounded = Physics.CheckSphere(groundCheck.position, groundDistance, groundMask);
-        fovCurrent = Camera.main.fieldOfView;
 
         if (isGrounded && velocity.y < 0)
         {
@@ -48,15 +48,32 @@ public class PlayerMovement : MonoBehaviour
         Vector3 move = transform.right * x + transform.forward * z;
 
 
+        // aiming FOV
+        if (Input.GetMouseButton(1))
+        {
+            isAiming = true;
+            FovSmoothSwitcher(fovAim, 0.6f);
+        } else
+        {
+            isAiming = false;
+        }
+
+        Debug.Log(isAiming);
+
         // allow the player to sprint with shift  !! change to use built in sprint button !!
-        if(Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKey(KeyCode.LeftShift) && !isAiming)
         {
             speed = sprint;
             FovSmoothSwitcher(fovSprint, 0.095f);
-        } 
-        else 
+        } else
         {
             speed = walk;
+        }
+
+
+        // Set FOV back to default when no special events happening
+        if (!isAiming && speed != sprint)
+        {
             FovSmoothSwitcher(fovDefault, 0.1f);
         }
 
@@ -74,6 +91,8 @@ public class PlayerMovement : MonoBehaviour
         controller.Move(velocity * Time.deltaTime);
 
         Debug.Log(Camera.main.fieldOfView);
+
+        
 
     }
 

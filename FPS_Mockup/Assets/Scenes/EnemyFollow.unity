@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657832, g: 0.49641222, b: 0.57481664, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -187,7 +187,7 @@ MonoBehaviour:
   controller: {fileID: 131142850}
   speed: 8
   walk: 8
-  sprint: 2
+  sprint: 16
   gravity: -58.86
   jumpHeight: 3
   groundCheck: {fileID: 123181387}
@@ -195,6 +195,7 @@ MonoBehaviour:
   groundMask:
     serializedVersion: 2
     m_Bits: 64
+  fovAim: 45
 --- !u!143 &131142850
 CharacterController:
   m_ObjectHideFlags: 0
