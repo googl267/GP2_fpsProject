@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GunScript : MonoBehaviour
 {
@@ -16,6 +17,7 @@ public class GunScript : MonoBehaviour
     public Camera fpsCam;
     public ParticleSystem muzzleFlash;
     public GameObject impactEffect;
+
 
     private float nextTimeToFire = 0f;
 
@@ -35,6 +37,7 @@ public class GunScript : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
 
         if (isReloading)
             return;
