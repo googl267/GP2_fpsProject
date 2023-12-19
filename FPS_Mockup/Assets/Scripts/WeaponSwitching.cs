@@ -14,6 +14,8 @@ public class WeaponSwitching : MonoBehaviour
     void Update()
     {
         int previousSelectedWeapon = selectedWeapon;
+
+        // allows scroll wheel to change weapon active
         if (Input.GetAxis("Mouse ScrollWheel") > 0f)
         {
             if (selectedWeapon >= transform.childCount - 1)
@@ -29,6 +31,7 @@ public class WeaponSwitching : MonoBehaviour
                 selectedWeapon--;
         }
 
+        // allows numbers to change weapon active
         if (Input.GetKeyDown(KeyCode.Alpha1))
         {
             selectedWeapon = 0;
@@ -44,6 +47,7 @@ public class WeaponSwitching : MonoBehaviour
             selectedWeapon = 2;
         }
 
+        //if selected new weapon, initiate SelectedWeapon method
         if (previousSelectedWeapon != selectedWeapon)
         {
             SelectWeapon();
@@ -52,13 +56,18 @@ public class WeaponSwitching : MonoBehaviour
 
     void SelectWeapon()
     {
+
+        // change which weapon is active
         int i = 0;
         foreach (Transform weapon in transform)
         {
+            //activate selected weapon
             if (i == selectedWeapon)
                 weapon.gameObject.SetActive(true);
+            //deactivate previous weapon
             else
                 weapon.gameObject.SetActive(false);
+
             i++;
         }
     }

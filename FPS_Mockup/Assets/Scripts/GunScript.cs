@@ -30,6 +30,7 @@ public class GunScript : MonoBehaviour
 
     void OnEnable ()
     {
+        //reloading animation
         isReloading = false;
         animator.SetBool("Reloading", false);
     }
@@ -38,7 +39,7 @@ public class GunScript : MonoBehaviour
     void Update()
     {
 
-
+        //when out of ammo, reload
         if (isReloading)
             return;
 
@@ -48,6 +49,7 @@ public class GunScript : MonoBehaviour
             return;
         }
 
+        //when button is pressed, delay and go to shoot method
         if (Input.GetButtonDown("Fire1") && Time.time >= nextTimeToFire)
         {
             nextTimeToFire = Time.time + 1f / fireRate;
@@ -57,8 +59,10 @@ public class GunScript : MonoBehaviour
 
     void Shoot()
     {
+        //play flash for gun
         muzzleFlash.Play();
 
+        //after pressing shoot
         currentAmmo--;
 
         RaycastHit hit;
@@ -67,17 +71,20 @@ public class GunScript : MonoBehaviour
         {
             Debug.Log(hit.transform.name);
 
+            // enemy takes damage when hit
             Enemy enemy  = hit.transform.GetComponent<Enemy>();
             if ( enemy != null)
             {
                 enemy.TakeDamage(damage);
             }
 
+            // enemy takes force with damage when hit
             if (hit.rigidbody != null)
             {
                 hit.rigidbody.AddForce(-hit.normal * impactForce);
             }
 
+            // shows impact effect in location that is hit with bullet
             GameObject impactGO = Instantiate(impactEffect, hit.point, Quaternion.LookRotation(hit.normal));
             Destroy(impactGO, 1f);
         }
@@ -87,13 +94,15 @@ public class GunScript : MonoBehaviour
     {
         isReloading = true;
         Debug.Log("Reloading...");
-
-        animator.SetBool("Reloading", true);
         
+        //animator switch
+        animator.SetBool("Reloading", true);
+  
         yield return new WaitForSeconds(reloadTime - .25f);
         animator.SetBool("Reloading", false);
         yield return new WaitForSeconds(.25f);
 
+        //ammo 
         currentAmmo = maxAmmo;
         isReloading = false;
 
