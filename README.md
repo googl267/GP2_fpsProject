@@ -1,4 +1,9 @@
-# Game Programming II Course Long Assignment
+## Steampunk capture the point FPS
+player controller
+
+
+
+## Overview
 <details close> 
   <summary><h2>Project Outline</h2></summary>
   
