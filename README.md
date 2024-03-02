@@ -1,82 +1,94 @@
-# Game Programming II Course Long Assignment
-<details close> 
-  <summary><h2>Project Outline</h2></summary>
-  
-  <details open> 
-    <summary><h4>Gameplay</h4></summary>
-    
-  - The game consists of a linear map of checkpoints the player must capture to complete the level/game. During the game the player will have 5 minutes to capture the nearest point
-  - Timer - (5 minute length placeholder) - If the 5 minutes run out before the player captures the point, the enemies will have 5 minutes to take the players point (enemies will advance towards the players point)
-  - Points - captured by being the only team at the point location for 10 seconds
-  - Enemies - As the player captures more points, harder enemies will appear
-  - If the player is pushed back, the harder enemies will not stop spawning
-
-  </details>
-
-  <details open> 
-    <summary><h4>GUI</h4></summary>
-    
-  - Health, Ammo, Inv - left side health bar, ammo count under health, right side quick inventory (medkit, etc)
-  - Marker - checkpoint direction
-  - Checkpoint Bar - (colored checkpoints = captured, greyscale = to be captured)
-  - Timer - shows time left and current goal (ie: attack/defend)
-  </details>
-
-  <details open> 
-    <summary><h4>Sound/Effects</h4></summary>
-    
-  - Movement - Running, jumping, firing, knockout, low health, oneshot - will have sound effects
-  - Markers - Hit markers and knockout - effects
-  </details>
-
-  <details open> 
-    <summary><h4>Backlog</h4></summary>
-    
-  - Artillery - (pulls up a map that lets you click a location to send a large amount of damage to after delay)
-  - Advanced enemy AI - (Enemies basic implementation is just stand around predetermined points, and run towards capture points. New Ai would cause some to shoot from afar, stay together in “squads”, and flank)
-  </details>
-</details>
+# Steampunk capture the point FPS
 
 
+## Progress
+- 0.0.0: created unity project
+- 0.0.9: created player controller, guns, basic enemy AI
 
-## Tutorials
-- https://www.youtube.com/@Brackeys
-
-## Timeline
-<details open> 
-  <summary><h4>Player</h4></summary>
-  
-  - [X] Collisions
+#### Timeline
   - [X] Movement
-  - [X] Jump, Sprint, Etc
+  - [X] Jump, Sprint, Crouch
   - [ ] Health and Ammo
   - [ ] Weapon and Firing
   - [ ] Scope aim
   - [ ] Consumeable throw
   - [ ] Health kit
-</details>
-
-<details open> 
-  <summary><h4>Enemys</h4></summary>
   
-  - [ ] Collisions
-  - [ ] Movement
   - [ ] AI and Aim RNG
-  - [ ] Spawning
-</details>
-
-<details open> 
-  <summary><h4>Gameplay</h4></summary>
   
   - [ ] Capture points
   - [ ] Spawn locations
   - [ ] Capture and defend timer
   - [ ] Harder Enemys with progression
   - [ ] Weapon Variety
-</details>
+
+
+## Formatting
+Code should be formatted with [C Sharpier](https://csharpier.com/)
+
+#### Variables
+- Camel Case (variableName)
+- getter-setters should use Pascal Case (VaraibleName)
+- booleans should start with "is", "can", or "should"
+- keycodes should start with "key"
+- vector3s should start with "center", "position", or "direction"
+
+#### Functions
+- Pascal Snake Case (Function_Name)
+- Functions that return a value should start with "Get"
+- Functions that take an input should start with "Set"
+- Functions that change global variables should start with "Apply"
+- Functions that have conditions should start with "Handle"
+
+#### Constants
+- Upper Snake Case (CONSTAINT_NAME)
+
+
+## Resources
+#### Channels
+- [Brackeyes](https://www.youtube.com/@brackeys)
+- [Welton King](https://www.youtube.com/@welton.king.v)
+- [Mina Pecheux](https://www.youtube.com/@minapecheux)
+- [Comp-3 Interactive](https://www.youtube.com/@comp3interactive)
+- [Llam Academy](https://www.youtube.com/@LlamAcademy)
+
+#### Tutorials
+- [Advanced Coding For Big Projects](https://youtu.be/dLCLqEkbGEQ)
+- [FPS Controller](https://youtu.be/2FTDa14nryI)
+- [Guns From Scratch](https://www.youtube.com/playlist?list=PLllNmP7eq6TQJjgKJ6FKcNFfRREe_L6to)
+- [Projectiles](https://youtu.be/gEldXRstNHE)
+- [Behaviour Tree](https://youtu.be/aR6wt5BlE-E)
+- [Random Enemy Spawn Positions](https://youtu.be/ydjpNNA5804)
+
+
+## Project Outline
+
+#### Gameplay
+  - The game consists of a linear map of checkpoints the player must capture to complete the level/game. During the game the player will have 5 minutes to capture the nearest point
+  - Timer - (5 minute length placeholder) - If the 5 minutes run out before the player captures the point, the enemies will have 5 minutes to take the players point (enemies will advance towards the players point)
+  - Points - captured by being the only team at the point location for 10 seconds
+  - Enemies - As the player captures more points, harder enemies will appear
+  - If the player is pushed back, the harder enemies will not stop spawning
+
+#### GUI
+  - Health, Ammo, Inv - left side health bar, ammo count under health, right side quick inventory (medkit, etc)
+  - Marker - checkpoint direction
+  - Checkpoint Bar - (colored checkpoints = captured, greyscale = to be captured)
+  - Timer - shows time left and current goal (ie: attack/defend)
+
+#### Sound/Effects
+  - Movement - Running, jumping, firing, knockout, low health, oneshot - will have sound effects
+  - Markers - Hit markers and knockout - effects
+
+#### Backlog
+  - Artillery - (pulls up a map that lets you click a location to send a large amount of damage to after delay)
+  - Advanced enemy AI - (Enemies basic implementation is just stand around predetermined points, and run towards capture points. New Ai would cause some to shoot from afar, stay together in “squads”, and flank)
+
+
+## How to use git/github
 
 <details close> 
-  <summary><h3>Powershell Directions</h3></summary>
+  <summary>Powershell Directions</summary>
   
   - Install Windows Terminal from microsoft store
   - Install a nerd font (https://www.nerdfonts.com/font-downloads)
@@ -94,7 +106,7 @@
 </details>
 
 <details close> 
-  <summary><h3>Git Setup Directions</h3></summary>
+  <summary>Git Setup Directions</summary>
   
   - Setup your git run ` git config --global user.email "YOUR EMAIL" ` and ` git config --global user.name "YOUR NAME" `
   - Create a ` GitHub ` folder in Documents
@@ -107,7 +119,7 @@
 </details>
 
 <details open> 
-  <summary><h3>Using Git</h3></summary>
+  <summary>Using Git</summary>
   
   - Make sure your in your project directory on the right branch
   - To sync run ` git pull `
