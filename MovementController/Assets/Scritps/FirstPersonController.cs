@@ -56,6 +56,7 @@ public class FirstPersonController : MonoBehaviour {
     [SerializeField] private float crouchBobAmount = 0.025f;
     private float defaultYPos = 0;
     private float timer;
+    private float minimumMovementToBob = 3f;
 
     // [NOTE] variables should always be private, public variables can be modified by anything at any time, causing bugs in the Unity game engine
     // [NOTE] variables that need to be publically available use getter setter method as seen above
@@ -139,6 +140,22 @@ public class FirstPersonController : MonoBehaviour {
     private void HandleHeadbob() {
         if(!characterController.isGrounded) return;
 
+        if (Mathf.Abs(new Vector2(characterController.velocity.x, characterController.velocity.z).magnitude) > minimumMovementToBob || (Mathf.Abs(defaultYPos - playerCamera.transform.localPosition.y) > 0.005f)) {
+            timer += Time.deltaTime * (isCrouching ? crouchBobSpeed : IsSprinting ? sprintBobSpeed : walkBobSpeed);
+            playerCamera.transform.localPosition = new Vector3(
+                playerCamera.transform.localPosition.x,
+                defaultYPos + Mathf.Sin(timer) * (isCrouching ? crouchBobAmount : IsSprinting ? sprintBobAmount : walkBobAmount),
+                playerCamera.transform.localPosition.z
+            );
+        } else if (playerCamera.transform.localPosition.y != defaultYPos) {
+            playerCamera.transform.localPosition = new Vector3(
+                playerCamera.transform.localPosition.x,
+                defaultYPos,
+                playerCamera.transform.localPosition.z
+            );
+        }
+
+/*
         if(Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f) {
             timer += Time.deltaTime * (isCrouching ? crouchBobSpeed : IsSprinting ? sprintBobSpeed : walkBobSpeed);
             playerCamera.transform.localPosition = new Vector3(
@@ -147,6 +164,7 @@ public class FirstPersonController : MonoBehaviour {
                 playerCamera.transform.localPosition.z
             );
         }
+        */
     }
 
     private void ApplyFinalMovements() {
