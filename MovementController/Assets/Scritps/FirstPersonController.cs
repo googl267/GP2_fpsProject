@@ -11,10 +11,11 @@ public class FirstPersonController : MonoBehaviour {
     
     // [Header("foo")] - creates a header in the unity menu
     [Header("Functional Options")]
-    // [SerializedFeild] - lets the editor acess private values
+    // [SerializeFeild] - lets the editor acess private values
     [SerializeField] private bool canSprint = true;
     [SerializeField] private bool canJump = true;
     [SerializeField] private bool canCrouch = true;
+    [SerializeField] private bool canUseHeadbob = true;
 
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -46,6 +47,16 @@ public class FirstPersonController : MonoBehaviour {
     private bool isCrouching;
     private bool duringCrouchAnimation;
 
+    [Header("Headbob Parameters")]
+    [SerializeField] private float walkBobSpeed = 14f;
+    [SerializeField] private float walkBobAmount = 0.05f;
+    [SerializeField] private float sprintBobSpeed = 18f;
+    [SerializeField] private float sprintBobAmount = 0.1f;
+    [SerializeField] private float crouchBobSpeed = 8f;
+    [SerializeField] private float crouchBobAmount = 0.025f;
+    private float defaultYPos = 0;
+    private float timer;
+
     // [NOTE] variables should always be private, public variables can be modified by anything at any time, causing bugs in the Unity game engine
     // [NOTE] variables that need to be publically available use getter setter method as seen above
     private Camera playerCamera;
@@ -61,8 +72,11 @@ public class FirstPersonController : MonoBehaviour {
         playerCamera = GetComponentInChildren<Camera>();
         // get the character controller componant attached to the object
         characterController = GetComponentInChildren<CharacterController>();
+        // set the default Y position of the camera for headbob
+        defaultYPos = playerCamera.transform.localPosition.y;
         // lock the cursor to the screen
         Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     private void Update() {
@@ -75,6 +89,9 @@ public class FirstPersonController : MonoBehaviour {
 
             if (canCrouch)
                 HandleCrouch();
+
+            if (canUseHeadbob)
+                HandleHeadbob();
 
             ApplyFinalMovements();
         }
@@ -117,6 +134,19 @@ public class FirstPersonController : MonoBehaviour {
     private void HandleCrouch() {
         if(ShouldCrouch)
             StartCoroutine(CrouchStand());
+    }
+
+    private void HandleHeadbob() {
+        if(!characterController.isGrounded) return;
+
+        if(Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f) {
+            timer += Time.deltaTime * (isCrouching ? crouchBobSpeed : IsSprinting ? sprintBobSpeed : walkBobSpeed);
+            playerCamera.transform.localPosition = new Vector3(
+                playerCamera.transform.localPosition.x,
+                defaultYPos + Mathf.Sin(timer) * (isCrouching ? crouchBobAmount : IsSprinting ? sprintBobAmount : walkBobAmount),
+                playerCamera.transform.localPosition.z
+            );
+        }
     }
 
     private void ApplyFinalMovements() {

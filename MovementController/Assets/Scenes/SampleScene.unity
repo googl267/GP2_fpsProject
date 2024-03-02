@@ -1122,23 +1122,30 @@ MonoBehaviour:
   canSprint: 1
   canJump: 1
   canCrouch: 1
+  canUseHeadbob: 1
   sprintKey: 304
   jumpKey: 32
   crouchKey: 99
   walkSpeed: 3
   sprintSpeed: 6
   crouchSpeed: 1.5
-  lookSpeedX: 6
-  lookSpeedY: 6
-  upperLookLimit: 80
-  lowerLookLimit: 80
+  lookSpeedX: 4
+  lookSpeedY: 4
+  upperLookLimit: 90
+  lowerLookLimit: 90
   jumpForce: 8
   gravity: 30
   crouchHeight: 0.5
   standingHeight: 2
-  timeToCrouch: 0.15
+  timeToCrouch: 0.25
   crouchingCenter: {x: 0, y: 0.5, z: 0}
   standingCenter: {x: 0, y: 0, z: 0}
+  walkBobSpeed: 10
+  walkBobAmount: 0.05
+  sprintBobSpeed: 14
+  sprintBobAmount: 0.1
+  crouchBobSpeed: 8
+  crouchBobAmount: 0.025
 --- !u!143 &1351114697
 CharacterController:
   m_ObjectHideFlags: 0
