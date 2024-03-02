@@ -11,11 +11,12 @@ public class FirstPersonController : MonoBehaviour {
     
     // [Header("foo")] - creates a header in the unity menu
     [Header("Functional Options")]
-    // [SerializeFeild] - lets the editor acess private values
+    // [SerializeField] - lets the editor acess private values
     [SerializeField] private bool canSprint = true;
     [SerializeField] private bool canJump = true;
     [SerializeField] private bool canCrouch = true;
     [SerializeField] private bool canUseHeadbob = true;
+    [SerializeField] private bool willSlideOnSlopes = true;
 
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -27,6 +28,7 @@ public class FirstPersonController : MonoBehaviour {
     [SerializeField] private float walkSpeed = 3f;
     [SerializeField] private float sprintSpeed = 6f; 
     [SerializeField] private float crouchSpeed = 1.5f; 
+    [SerializeField] private float slopeSpeed = 8f; 
     
     [Header("Look Parameters")]
     [SerializeField, Range(1, 10)] private float lookSpeedX = 2f;
@@ -56,7 +58,21 @@ public class FirstPersonController : MonoBehaviour {
     [SerializeField] private float crouchBobAmount = 0.025f;
     private float defaultYPos = 0;
     private float timer;
-    private float minimumMovementToBob = 3f;
+    private float minimumMovementToBob = 2f;
+
+    // Sliding Params
+    private Vector3 hitPointNormal;
+    private float groundRayLength = 2f;
+    private bool IsSliding { 
+        get {  // PLEASE ADD CHECK TO SEE IF THE SLOPE IS GREATER THEN THE STEP HEIGHT. CURRENTLY THE PLAYER CANNOT MOVE IF CAUGHT ON TINY BUMP
+            if(characterController.isGrounded && Physics.Raycast(transform.position, Vector3.down, out RaycastHit slopeHit, groundRayLength)) {
+                hitPointNormal = slopeHit.normal;
+                return Vector3.Angle(hitPointNormal, Vector3.up) > characterController.slopeLimit;
+            } else {
+                return false;
+            }
+        }
+    }
 
     // [NOTE] variables should always be private, public variables can be modified by anything at any time, causing bugs in the Unity game engine
     // [NOTE] variables that need to be publically available use getter setter method as seen above
@@ -140,6 +156,7 @@ public class FirstPersonController : MonoBehaviour {
     private void HandleHeadbob() {
         if(!characterController.isGrounded) return;
 
+        // smooth stop fix by zombiemollusk7953
         if (Mathf.Abs(new Vector2(characterController.velocity.x, characterController.velocity.z).magnitude) > minimumMovementToBob || (Mathf.Abs(defaultYPos - playerCamera.transform.localPosition.y) > 0.005f)) {
             timer += Time.deltaTime * (isCrouching ? crouchBobSpeed : IsSprinting ? sprintBobSpeed : walkBobSpeed);
             playerCamera.transform.localPosition = new Vector3(
@@ -155,7 +172,8 @@ public class FirstPersonController : MonoBehaviour {
             );
         }
 
-/*
+        // original headbob code without smooth stop
+        /*
         if(Mathf.Abs(moveDirection.x) > 0.1f || Mathf.Abs(moveDirection.z) > 0.1f) {
             timer += Time.deltaTime * (isCrouching ? crouchBobSpeed : IsSprinting ? sprintBobSpeed : walkBobSpeed);
             playerCamera.transform.localPosition = new Vector3(
@@ -170,6 +188,9 @@ public class FirstPersonController : MonoBehaviour {
     private void ApplyFinalMovements() {
         if (!characterController.isGrounded)
             moveDirection.y -= gravity * Time.deltaTime;
+
+        if(willSlideOnSlopes && IsSliding)
+            moveDirection += new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSpeed;
 
         characterController.Move(moveDirection * Time.deltaTime);
     }
