@@ -36,8 +36,8 @@ public class FirstPersonController : MonoBehaviour {
     [Header("Look Parameters")]
     [SerializeField, Range(1, 10)] private float lookSpeedX = 2f;
     [SerializeField, Range(1, 10)] private float lookSpeedY = 2f;
-    [SerializeField, Range(1, 180)] private float upperLookLimit = 80f;
-    [SerializeField, Range(1, 180)] private float lowerLookLimit = 80f;
+    [SerializeField, Range(1, 180)] private float upperLookLimit = 88f;
+    [SerializeField, Range(1, 180)] private float lowerLookLimit = 88f;
 
     [Header("Jumping Parameters")]
     [SerializeField] private float jumpForce = 8f;
@@ -68,9 +68,11 @@ public class FirstPersonController : MonoBehaviour {
     [SerializeField] private float zoomFOV = 30f;
 
     [Header("Dynamic FOV Parameters")]
-    [SerializeField] private float timeToDynamic = 0.2f;
     [SerializeField] private float sprintFOV = 85f;
+    [SerializeField] private float timeToSprintFOV = 0.2f;
     [SerializeField] private float fallFOV = 75f;
+    [SerializeField] private float timeToFallFOV = 1f;
+    [SerializeField] private float timeToDynamic = 0.2f;
     private float timeToStopFallFOV = 0.05f;
     private float minimumMovementToSprintFOV = 0.1f;
     private float minimumMovementToFallFOV = 10f;
@@ -133,7 +135,7 @@ public class FirstPersonController : MonoBehaviour {
                 HandleHeadbob();
 
             if (canZoom)
-                HandleZoom();
+                HandleFOV();
 
             ApplyFinalMovements();
         }
@@ -162,7 +164,6 @@ public class FirstPersonController : MonoBehaviour {
         rotationX = Mathf.Clamp(rotationX, -upperLookLimit, lowerLookLimit);
         // rotate the camera to look up and down
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
-
         // rotate the player to turn left and right
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeedX, 0);
 
@@ -211,24 +212,22 @@ public class FirstPersonController : MonoBehaviour {
     }
 
 
-    private void HandleZoom() {
+    private void HandleFOV() {
         // whatFOV does not need a specific number but needs to be diffrent for every check
         // sprintingFOV
         if (IsSprinting && moveDirection.x > minimumMovementToSprintFOV && canDynamicFOV) {
             if (whatFOV == 2) return;
-            Debug.Log("FOV SPRINT");
             if(fovRoutine != null) {
                 StopCoroutine(fovRoutine);
                 fovRoutine = null;
             }
 
             whatFOV = 2;
-            fovRoutine = StartCoroutine(ToggleFOV(sprintFOV, timeToDynamic));
+            fovRoutine = StartCoroutine(ToggleFOV(sprintFOV, timeToSprintFOV));
         }  
         // zooming FOV
         else if (Input.GetKey(zoomKey) && !IsSprinting) {
             if (whatFOV == 1) return;
-            Debug.Log("FOV ZOOM");
             if(fovRoutine != null) {
                 StopCoroutine(fovRoutine);
                 fovRoutine = null;
@@ -240,17 +239,15 @@ public class FirstPersonController : MonoBehaviour {
         // falling FOV
         else if (characterController.velocity.y < -minimumMovementToFallFOV && canDynamicFOV) {
             if (whatFOV == 3) return;
-            Debug.Log("FOV FALL");
             if(fovRoutine != null) {
                 StopCoroutine(fovRoutine);
                 fovRoutine = null;
             }
 
             whatFOV = 3;
-            fovRoutine = StartCoroutine(ToggleFOV(fallFOV, timeToDynamic));
+            fovRoutine = StartCoroutine(ToggleFOV(fallFOV, timeToFallFOV));
         }
         else if (whatFOV != 0) {
-            Debug.Log("FOV NORMAL");
             if(fovRoutine != null) {
                 StopCoroutine(fovRoutine);
                 fovRoutine = null;
