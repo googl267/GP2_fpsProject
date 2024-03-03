@@ -17,11 +17,14 @@ public class FirstPersonController : MonoBehaviour {
     [SerializeField] private bool canCrouch = true;
     [SerializeField] private bool canUseHeadbob = true;
     [SerializeField] private bool willSlideOnSlopes = true;
+    [SerializeField] private bool canZoom = true;
+    [SerializeField] private bool canDynamicFOV = true;
 
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode crouchKey = KeyCode.C;
+    [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
 
     [Header("Movement Parameters")]
     private float speed;
@@ -60,6 +63,23 @@ public class FirstPersonController : MonoBehaviour {
     private float timer;
     private float minimumMovementToBob = 2f;
 
+    [Header("Zoom Parameters")]
+    [SerializeField] private float timeToZoom = 0.1f;
+    [SerializeField] private float zoomFOV = 30f;
+
+    [Header("Dynamic FOV Parameters")]
+    [SerializeField] private float timeToDynamic = 0.2f;
+    [SerializeField] private float sprintFOV = 85f;
+    [SerializeField] private float fallFOV = 75f;
+    private float timeToStopFallFOV = 0.05f;
+    private float minimumMovementToSprintFOV = 0.1f;
+    private float minimumMovementToFallFOV = 10f;
+
+    // FOV Params
+    private float defaultFOV;
+    private int whatFOV = 0; // 0 for default
+    private Coroutine fovRoutine;
+    
     // Sliding Params
     private Vector3 hitPointNormal;
     private float groundRayLength = 2f;
@@ -91,6 +111,8 @@ public class FirstPersonController : MonoBehaviour {
         characterController = GetComponentInChildren<CharacterController>();
         // set the default Y position of the camera for headbob
         defaultYPos = playerCamera.transform.localPosition.y;
+        // cache default camera FOV
+        defaultFOV = playerCamera.fieldOfView;
         // lock the cursor to the screen
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -109,6 +131,9 @@ public class FirstPersonController : MonoBehaviour {
 
             if (canUseHeadbob)
                 HandleHeadbob();
+
+            if (canZoom)
+                HandleZoom();
 
             ApplyFinalMovements();
         }
@@ -185,6 +210,63 @@ public class FirstPersonController : MonoBehaviour {
         */
     }
 
+
+    private void HandleZoom() {
+        // whatFOV does not need a specific number but needs to be diffrent for every check
+        // sprintingFOV
+        if (IsSprinting && moveDirection.x > minimumMovementToSprintFOV && canDynamicFOV) {
+            if (whatFOV == 2) return;
+            Debug.Log("FOV SPRINT");
+            if(fovRoutine != null) {
+                StopCoroutine(fovRoutine);
+                fovRoutine = null;
+            }
+
+            whatFOV = 2;
+            fovRoutine = StartCoroutine(ToggleFOV(sprintFOV, timeToDynamic));
+        }  
+        // zooming FOV
+        else if (Input.GetKey(zoomKey) && !IsSprinting) {
+            if (whatFOV == 1) return;
+            Debug.Log("FOV ZOOM");
+            if(fovRoutine != null) {
+                StopCoroutine(fovRoutine);
+                fovRoutine = null;
+            }
+
+            whatFOV = 1;
+            fovRoutine = StartCoroutine(ToggleFOV(zoomFOV, timeToZoom));
+        }
+        // falling FOV
+        else if (characterController.velocity.y < -minimumMovementToFallFOV && canDynamicFOV) {
+            if (whatFOV == 3) return;
+            Debug.Log("FOV FALL");
+            if(fovRoutine != null) {
+                StopCoroutine(fovRoutine);
+                fovRoutine = null;
+            }
+
+            whatFOV = 3;
+            fovRoutine = StartCoroutine(ToggleFOV(fallFOV, timeToDynamic));
+        }
+        else if (whatFOV != 0) {
+            Debug.Log("FOV NORMAL");
+            if(fovRoutine != null) {
+                StopCoroutine(fovRoutine);
+                fovRoutine = null;
+            }
+
+            if (whatFOV == 1) {
+                fovRoutine = StartCoroutine(ToggleFOV(defaultFOV, timeToZoom));
+            } else if (whatFOV == 3) {
+                fovRoutine = StartCoroutine(ToggleFOV(defaultFOV, timeToStopFallFOV));
+            } else {
+                fovRoutine = StartCoroutine(ToggleFOV(defaultFOV, timeToDynamic));
+            }
+            whatFOV = 0;
+        }
+    }
+
     private void ApplyFinalMovements() {
         if (!characterController.isGrounded)
             moveDirection.y -= gravity * Time.deltaTime;
@@ -235,6 +317,21 @@ public class FirstPersonController : MonoBehaviour {
 
         // duration has finished, switch during variable to false
         duringCrouchAnimation = false;
+    }
+
+    private IEnumerator ToggleFOV(float FOV, float timeToFOV) {
+        float targetFOV = FOV;
+        float startingFOV = playerCamera.fieldOfView;
+        float timeElapsed = 0;
+
+        while(timeElapsed < timeToFOV) {
+            playerCamera.fieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed / timeToFOV);
+            timeElapsed += Time.deltaTime;
+            yield return null;
+        }
+
+        playerCamera.fieldOfView = targetFOV;
+        fovRoutine = null;
     }
 
     

@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 8701
+  controlID: 19422
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 8702
+  controlID: 19423
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -447,7 +447,7 @@ MonoBehaviour:
       floating: 0
       collapsed: 0
       displayed: 1
-      snapOffset: {x: 48, y: 48}
+      snapOffset: {x: 48, y: 10}
       snapOffsetDelta: {x: 0, y: 0}
       snapCorner: 0
       id: UnityEditor.SceneViewCameraOverlay
@@ -466,9 +466,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -12.679249, y: -5.2435517, z: -58.8635}
+    m_Target: {x: -27.607466, y: -7.2585096, z: -55.45413}
     speed: 2
-    m_Value: {x: -12.679249, y: -5.2435517, z: -58.8635}
+    m_Value: {x: -27.607466, y: -7.2585096, z: -55.45413}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -514,13 +514,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.0018780504, y: 0.9975332, z: -0.063827164, w: -0.029325046}
+    m_Target: {x: -0.026349049, y: 0.9668217, z: -0.1115769, w: -0.22830221}
     speed: 2
-    m_Value: {x: -0.0018780412, y: 0.9975283, z: -0.06382685, w: -0.029324902}
+    m_Value: {x: -0.026348924, y: 0.9668171, z: -0.11157637, w: -0.22830112}
   m_Size:
-    m_Target: 33.602867
+    m_Target: 59.550873
     speed: 2
-    m_Value: 33.602867
+    m_Value: 59.550873
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -620,7 +620,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 8760
+  controlID: 19481
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -878,7 +878,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 8807
+  controlID: 19528
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -941,10 +941,10 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 82}
+      scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: ba84ffff30fbffffc06c00000e6d0000
+      m_ExpandedIDs: ba84ffff30fbffff0e6d0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -1034,7 +1034,7 @@ MonoBehaviour:
     m_CachedPref: 160
     m_ControlHash: -371814159
     m_PrefName: Preview_InspectorPreview
-  m_LastInspectedObjectInstanceID: -1
+  m_LastInspectedObjectInstanceID: 27918
   m_LastVerticalScrollValue: 0
   m_GlobalObjectId: 
   m_InspectorMode: 0
