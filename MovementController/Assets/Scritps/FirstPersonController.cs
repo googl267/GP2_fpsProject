@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class FirstPersonController : MonoBehaviour {
@@ -20,6 +21,7 @@ public class FirstPersonController : MonoBehaviour {
     [SerializeField] private bool canZoom = true;
     [SerializeField] private bool canDynamicFOV = true;
     [SerializeField] private bool canInteract = true;
+    [SerializeField] private bool canUseItems = true;
 
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
@@ -40,6 +42,17 @@ public class FirstPersonController : MonoBehaviour {
     [SerializeField, Range(1, 10)] private float lookSpeedY = 2f;
     [SerializeField, Range(1, 180)] private float upperLookLimit = 88f;
     [SerializeField, Range(1, 180)] private float lowerLookLimit = 88f;
+
+    [Header("Health Parameters")]
+    [SerializeField] private float maxHealth = 100f;
+    [SerializeField] private float timeBeforeRegenStarts = 3f;
+    [SerializeField] private float healthValueIncrement = 1f;
+    [SerializeField] private float healthTimeIncrement = 0.1f;
+    private float currentHealth;
+    private Coroutine regeneratingHealth;
+    public static Action<float> OnTakeDamage;
+    public static Action<float> OnDamage;
+    public static Action<float> OnHeal;
 
     [Header("Jumping Parameters")]
     [SerializeField] private float jumpForce = 8f;
@@ -105,7 +118,7 @@ public class FirstPersonController : MonoBehaviour {
     private Interactable currentInteractable;
     private int interactableLayer = 6;
 
-    [Header("Collectables")]
+    [Header("Items")]
     [SerializeField] private int maxHealthPackCarry = 5;
     [SerializeField] private int maxGernadeCarry = 5;
     private int countHealthPacks = 0;
@@ -121,6 +134,14 @@ public class FirstPersonController : MonoBehaviour {
 
     private float rotationX = 0;
 
+    private void OnEnable() {
+        OnTakeDamage += ApplyDamage;
+    }
+
+    private void OnDisable() {
+        OnTakeDamage -= ApplyDamage;
+    }
+
     private void Awake() {
         // get the camera attacked to the object
         playerCamera = GetComponentInChildren<Camera>();
@@ -130,6 +151,8 @@ public class FirstPersonController : MonoBehaviour {
         defaultYPos = playerCamera.transform.localPosition.y;
         // cache default camera FOV
         defaultFOV = playerCamera.fieldOfView;
+        // start game with current health set to max health
+        currentHealth = maxHealth;
         // lock the cursor to the screen
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
@@ -157,8 +180,15 @@ public class FirstPersonController : MonoBehaviour {
                 HandleInteractionInput();
             }
 
+            if (canUseItems)
+                HandleItems();
+            
             ApplyFinalMovements();
         }
+    }
+
+    private void HandleItems() {
+        
     }
 
     private void HandleMovementInput() {
@@ -308,6 +338,28 @@ public class FirstPersonController : MonoBehaviour {
         }
     }
 
+    private void ApplyDamage(float dmg) {
+        currentHealth -= dmg;
+        OnDamage?.Invoke(currentHealth); // ?.Invoke only runs the action when the there is a listener
+        
+        if(currentHealth <= 0)
+            KillPlayer();
+        else if (regeneratingHealth != null)
+            StopCoroutine(regeneratingHealth);
+
+        regeneratingHealth = StartCoroutine(RegenerateHealth());
+    }
+
+    private void KillPlayer() {
+        currentHealth = 0;
+        OnDamage?.Invoke(currentHealth);
+
+        if(regeneratingHealth != null)
+            StopCoroutine(regeneratingHealth);
+
+        print("DEAD");
+    }
+
     private void ApplyFinalMovements() {
         if (!characterController.isGrounded)
             moveDirection.y -= gravity * Time.deltaTime;
@@ -373,6 +425,23 @@ public class FirstPersonController : MonoBehaviour {
 
         playerCamera.fieldOfView = targetFOV;
         fovRoutine = null;
+    }
+
+    private IEnumerator RegenerateHealth() {
+        yield return new WaitForSeconds(timeBeforeRegenStarts);
+        WaitForSeconds timeToWait = new WaitForSeconds(healthTimeIncrement);
+
+        while(currentHealth < maxHealth) {
+            currentHealth += healthValueIncrement;
+
+            if(currentHealth > maxHealth)
+                currentHealth = maxHealth;
+
+            OnHeal?.Invoke(currentHealth);
+            yield return timeToWait;
+        }
+
+        regeneratingHealth = null;
     }
 
     

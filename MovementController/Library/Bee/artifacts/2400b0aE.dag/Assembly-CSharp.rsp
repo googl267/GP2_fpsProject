@@ -349,8 +349,11 @@
 -analyzer:"/home/googl/Unity/Hub/Editor/2022.3.13f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.Properties.SourceGenerator.dll"
 -analyzer:"/home/googl/Unity/Hub/Editor/2022.3.13f1/Editor/Data/Tools/Unity.SourceGenerators/Unity.SourceGenerators.dll"
 "Assets/Scritps/Boiler.cs"
+"Assets/Scritps/DamageTest.cs"
 "Assets/Scritps/FirstPersonController.cs"
+"Assets/Scritps/HealTest.cs"
 "Assets/Scritps/HealthPack.cs"
+"Assets/Scritps/UI.cs"
 "Assets/Scritps/interactable.cs"
 "Assets/Scritps/testInteract.cs"
 -langversion:9.0
