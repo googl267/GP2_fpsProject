@@ -19,12 +19,14 @@ public class FirstPersonController : MonoBehaviour {
     [SerializeField] private bool willSlideOnSlopes = true;
     [SerializeField] private bool canZoom = true;
     [SerializeField] private bool canDynamicFOV = true;
+    [SerializeField] private bool canInteract = true;
 
     [Header("Controls")]
     [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
     [SerializeField] private KeyCode jumpKey = KeyCode.Space;
     [SerializeField] private KeyCode crouchKey = KeyCode.C;
     [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
+    [SerializeField] private KeyCode interactKey = KeyCode.Mouse0;
 
     [Header("Movement Parameters")]
     private float speed;
@@ -96,6 +98,19 @@ public class FirstPersonController : MonoBehaviour {
         }
     }
 
+    [Header("Interaction")]
+    [SerializeField] private Vector3 interactionRayPoint = default;
+    [SerializeField] private float interactionDistance = default;
+    [SerializeField] private LayerMask interactionLayer = default;
+    private Interactable currentInteractable;
+    private int interactableLayer = 6;
+
+    [Header("Collectables")]
+    [SerializeField] private int maxHealthPackCarry = 5;
+    [SerializeField] private int maxGernadeCarry = 5;
+    private int countHealthPacks = 0;
+    private int countGernades = 0;
+
     // [NOTE] variables should always be private, public variables can be modified by anything at any time, causing bugs in the Unity game engine
     // [NOTE] variables that need to be publically available use getter setter method as seen above
     private Camera playerCamera;
@@ -136,6 +151,11 @@ public class FirstPersonController : MonoBehaviour {
 
             if (canZoom)
                 HandleFOV();
+
+            if (canInteract) {
+                HandleInteractionCheck();
+                HandleInteractionInput();
+            }
 
             ApplyFinalMovements();
         }
@@ -261,6 +281,30 @@ public class FirstPersonController : MonoBehaviour {
                 fovRoutine = StartCoroutine(ToggleFOV(defaultFOV, timeToDynamic));
             }
             whatFOV = 0;
+        }
+    }
+
+    private void HandleInteractionCheck() {
+        if(Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint), out RaycastHit hit, interactionDistance) && hit.collider.gameObject.layer == interactableLayer) {
+            if(hit.collider.gameObject.layer == interactableLayer && (currentInteractable == null || hit.collider.gameObject.GetInstanceID() != currentInteractable.gameObject.GetInstanceID())) { // the number is refrencing the Interactable game layer
+                hit.collider.TryGetComponent(out currentInteractable);
+
+                if (currentInteractable)
+                    currentInteractable.OnFocus();
+            } 
+        }
+        else if (currentInteractable) {
+            currentInteractable.OnLoseFocus();
+            currentInteractable = null;
+        }
+    }
+
+    private void HandleInteractionInput() {
+        if(Input.GetKeyDown(interactKey) 
+            && currentInteractable != null 
+            && Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint), 
+            out RaycastHit hit, interactionDistance, interactionLayer)) {
+            currentInteractable.OnInteract();
         }
     }
 

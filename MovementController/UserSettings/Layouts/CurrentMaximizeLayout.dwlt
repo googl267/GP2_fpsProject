@@ -24,7 +24,7 @@ MonoBehaviour:
   m_MinSize: {x: 300, y: 100}
   m_MaxSize: {x: 24288, y: 16192}
   vertical: 0
-  controlID: 20373
+  controlID: 22897
 --- !u!114 &2
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -147,7 +147,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 100}
   m_MaxSize: {x: 16192, y: 16192}
   vertical: 1
-  controlID: 20374
+  controlID: 22898
 --- !u!114 &4
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -167,8 +167,8 @@ MonoBehaviour:
     y: 0
     width: 1441
     height: 672
-  m_MinSize: {x: 201, y: 221}
-  m_MaxSize: {x: 4001, y: 4021}
+  m_MinSize: {x: 200, y: 200}
+  m_MaxSize: {x: 4000, y: 4000}
   m_ActualView: {fileID: 5}
   m_Panes:
   - {fileID: 5}
@@ -466,9 +466,9 @@ MonoBehaviour:
   m_PlayAudio: 0
   m_AudioPlay: 0
   m_Position:
-    m_Target: {x: -33.945946, y: -18.45709, z: -49.35471}
+    m_Target: {x: -48.186314, y: -33.809273, z: -25.359703}
     speed: 2
-    m_Value: {x: -33.945946, y: -18.45709, z: -49.35471}
+    m_Value: {x: -48.186314, y: -33.809273, z: -25.359703}
   m_RenderMode: 0
   m_CameraMode:
     drawMode: 0
@@ -514,13 +514,13 @@ MonoBehaviour:
     m_GridAxis: 1
     m_gridOpacity: 0.5
   m_Rotation:
-    m_Target: {x: -0.026349049, y: 0.9668217, z: -0.1115769, w: -0.22830221}
+    m_Target: {x: -0.14163125, y: 0.8188774, z: -0.22874607, w: -0.50701636}
     speed: 2
-    m_Value: {x: -0.026348924, y: 0.9668171, z: -0.11157637, w: -0.22830112}
+    m_Value: {x: -0.14163053, y: 0.8188733, z: -0.22874492, w: -0.5070138}
   m_Size:
-    m_Target: 61.567486
+    m_Target: 38.76339
     speed: 2
-    m_Value: 61.567486
+    m_Value: 38.76339
   m_Ortho:
     m_Target: 0
     speed: 2
@@ -620,7 +620,7 @@ MonoBehaviour:
   m_MinSize: {x: 200, y: 50}
   m_MaxSize: {x: 16192, y: 8096}
   vertical: 0
-  controlID: 20432
+  controlID: 22943
 --- !u!114 &8
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -693,7 +693,7 @@ MonoBehaviour:
     m_SkipHidden: 0
     m_SearchArea: 1
     m_Folders:
-    - Assets/Thirdparty/Ciathyza/Gridbox Prototype Materials/Textures
+    - Assets/Scritps
     m_Globs: []
     m_OriginalText: 
     m_ImportLogFlags: 0
@@ -701,15 +701,15 @@ MonoBehaviour:
   m_ViewMode: 1
   m_StartGridSize: 64
   m_LastFolders:
-  - Assets/Thirdparty/Ciathyza/Gridbox Prototype Materials/Textures
+  - Assets/Scritps
   m_LastFoldersGridSize: -1
   m_LastProjectPath: /home/googl/Documents/Git_Projs/GitHub/GP2_fpsProject/MovementController
   m_LockTracker:
     m_IsLocked: 0
   m_FolderTreeState:
     scrollPos: {x: 0, y: 0}
-    m_SelectedIDs: 82760000
-    m_LastClickedID: 30338
+    m_SelectedIDs: a86c0000
+    m_LastClickedID: 27816
     m_ExpandedIDs: 00000000a06c000000ca9a3b
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -765,7 +765,7 @@ MonoBehaviour:
   m_ListAreaState:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
-    m_HadKeyboardFocusLastEvent: 0
+    m_HadKeyboardFocusLastEvent: 1
     m_ExpandedInstanceIDs: c6230000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
@@ -878,7 +878,7 @@ MonoBehaviour:
   m_MinSize: {x: 100, y: 100}
   m_MaxSize: {x: 8096, y: 16192}
   vertical: 1
-  controlID: 20479
+  controlID: 22988
 --- !u!114 &13
 MonoBehaviour:
   m_ObjectHideFlags: 52
@@ -941,10 +941,10 @@ MonoBehaviour:
     m_OverlaysVisible: 1
   m_SceneHierarchy:
     m_TreeViewState:
-      scrollPos: {x: 0, y: 162}
+      scrollPos: {x: 0, y: 0}
       m_SelectedIDs: 
       m_LastClickedID: 0
-      m_ExpandedIDs: ba84ffff30fbffffc06c00000e6d0000
+      m_ExpandedIDs: ba84ffff30fbffff0e6d0000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
