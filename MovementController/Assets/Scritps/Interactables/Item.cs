@@ -1,6 +1,6 @@
 public class Item : Interactable
 {
-    public float weight { get; private set; } = 10f;
+    public float weight { get; protected set; } = 10f;
 
     public override void OnFocus()
     {
@@ -9,7 +9,7 @@ public class Item : Interactable
 
     public override void OnInteract()
     {
-        InventoryController.OnPickedUpAttempt(this);
+        FirstPersonController.OnPickedUpAttempt(this);
     }
 
     public override void OnLoseFocus()

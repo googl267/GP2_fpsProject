@@ -352,10 +352,9 @@
 "Assets/Scritps/DamageTest.cs"
 "Assets/Scritps/FirstPersonController.cs"
 "Assets/Scritps/Interactables/HealthPack.cs"
+"Assets/Scritps/Interactables/Interactable.cs"
 "Assets/Scritps/Interactables/Item.cs"
-"Assets/Scritps/Interactables/interactable.cs"
 "Assets/Scritps/Interactables/testInteract.cs"
-"Assets/Scritps/Inventory/InventoryController.cs"
 "Assets/Scritps/UI.cs"
 -langversion:9.0
 

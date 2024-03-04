@@ -100,6 +100,19 @@ public class FirstPersonController : MonoBehaviour
     public static Action<float> OnDamage;
     public static Action<float> OnHeal;
 
+    [Header("Inventory Properties")]
+    [SerializeField] private float maxWeight = 50;
+    private float currentWeight = 0;
+    public static Action<Item> OnPickedUpAttempt;
+
+    [Serializable]
+    public class ItemData {
+        public string id;
+        public string name;
+        public string weight;
+        public string count;
+    }
+
     [Header("Jumping Parameters")]
     [SerializeField]
     private float jumpForce = 8f;
@@ -230,11 +243,13 @@ public class FirstPersonController : MonoBehaviour
     private void OnEnable()
     {
         OnTakeDamage += ApplyDamage;
+        OnPickedUpAttempt += AttemptPickUp;
     }
 
     private void OnDisable()
     {
         OnTakeDamage -= ApplyDamage;
+        OnPickedUpAttempt -= AttemptPickUp;
     }
 
     private void Awake()
@@ -535,6 +550,17 @@ public class FirstPersonController : MonoBehaviour
             StopCoroutine(regeneratingHealth);
 
         print("DEAD");
+    }
+
+    public void AttemptPickUp(Item itemRef) {
+        if (currentWeight + itemRef.weight > maxWeight) {
+            print("NO SPARE WEIGHT");
+            return;
+        }
+
+        currentWeight += itemRef.weight;
+        Destroy(itemRef.gameObject);
+        print("PICKED UP ITEM");
     }
 
     private void ApplyFinalMovements()

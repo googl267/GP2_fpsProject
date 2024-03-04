@@ -2871,8 +2871,6 @@ GameObject:
   - component: {fileID: 1351114698}
   - component: {fileID: 1351114697}
   - component: {fileID: 1351114696}
-  - component: {fileID: 1351114699}
-  - component: {fileID: 1351114700}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -2917,6 +2915,7 @@ MonoBehaviour:
   timeBeforeRegenStarts: 3
   healthValueIncrement: 1
   healthTimeIncrement: 0.1
+  maxWeight: 15
   jumpForce: 8
   gravity: 30
   crouchHeight: 0.5
@@ -2984,32 +2983,6 @@ Transform:
   - {fileID: 963194228}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1351114699
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1351114695}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b559178a0308bc08cae2d3207e38ee19, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxWeight: 50
---- !u!114 &1351114700
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1351114695}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aeaa74e552c85dc09a34ec50af6de223, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  maxWeight: 50
 --- !u!1 &1617498887
 GameObject:
   m_ObjectHideFlags: 0
