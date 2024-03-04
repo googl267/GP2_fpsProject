@@ -1,53 +1,99 @@
-using System.Collections;
-using System.Collections.Generic;
 using System;
+using System.Collections;
 using UnityEngine;
 
-public class FirstPersonController : MonoBehaviour {
+public class FirstPersonController : MonoBehaviour
+{
     // { get; private set; } - allows scripts to acess the data but not change it. Shorthand for classic getter and setter methods
-    public bool CanMove { get; private set; } = true; 
+    public bool CanMove { get; private set; } = true;
     private bool IsSprinting => canSprint && Input.GetKey(sprintKey);
     private bool ShouldJump => Input.GetKeyDown(jumpKey) && characterController.isGrounded;
-    private bool ShouldCrouch => Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
-    
+    private bool ShouldCrouch =>
+        Input.GetKeyDown(crouchKey) && !duringCrouchAnimation && characterController.isGrounded;
+
     // [Header("foo")] - creates a header in the unity menu
     [Header("Functional Options")]
     // [SerializeField] - lets the editor acess private values
-    [SerializeField] private bool canSprint = true;
-    [SerializeField] private bool canJump = true;
-    [SerializeField] private bool canCrouch = true;
-    [SerializeField] private bool canUseHeadbob = true;
-    [SerializeField] private bool willSlideOnSlopes = true;
-    [SerializeField] private bool canZoom = true;
-    [SerializeField] private bool canDynamicFOV = true;
-    [SerializeField] private bool canInteract = true;
-    [SerializeField] private bool canUseItems = true;
+    [SerializeField]
+    private bool canSprint = true;
+
+    [SerializeField]
+    private bool canJump = true;
+
+    [SerializeField]
+    private bool canCrouch = true;
+
+    [SerializeField]
+    private bool canUseHeadbob = true;
+
+    [SerializeField]
+    private bool willSlideOnSlopes = true;
+
+    [SerializeField]
+    private bool canZoom = true;
+
+    [SerializeField]
+    private bool canDynamicFOV = true;
+
+    [SerializeField]
+    private bool canInteract = true;
 
     [Header("Controls")]
-    [SerializeField] private KeyCode sprintKey = KeyCode.LeftShift;
-    [SerializeField] private KeyCode jumpKey = KeyCode.Space;
-    [SerializeField] private KeyCode crouchKey = KeyCode.C;
-    [SerializeField] private KeyCode zoomKey = KeyCode.Mouse1;
-    [SerializeField] private KeyCode interactKey = KeyCode.Mouse0;
+    [SerializeField]
+    private KeyCode sprintKey = KeyCode.LeftShift;
+
+    [SerializeField]
+    private KeyCode jumpKey = KeyCode.Space;
+
+    [SerializeField]
+    private KeyCode crouchKey = KeyCode.C;
+
+    [SerializeField]
+    private KeyCode zoomKey = KeyCode.Mouse1;
+
+    [SerializeField]
+    private KeyCode interactKey = KeyCode.Mouse0;
 
     [Header("Movement Parameters")]
     private float speed;
-    [SerializeField] private float walkSpeed = 3f;
-    [SerializeField] private float sprintSpeed = 6f; 
-    [SerializeField] private float crouchSpeed = 1.5f; 
-    [SerializeField] private float slopeSpeed = 8f; 
-    
+
+    [SerializeField]
+    private float walkSpeed = 3f;
+
+    [SerializeField]
+    private float sprintSpeed = 6f;
+
+    [SerializeField]
+    private float crouchSpeed = 1.5f;
+
+    [SerializeField]
+    private float slopeSpeed = 8f;
+
     [Header("Look Parameters")]
-    [SerializeField, Range(1, 10)] private float lookSpeedX = 2f;
-    [SerializeField, Range(1, 10)] private float lookSpeedY = 2f;
-    [SerializeField, Range(1, 180)] private float upperLookLimit = 88f;
-    [SerializeField, Range(1, 180)] private float lowerLookLimit = 88f;
+    [SerializeField, Range(1, 10)]
+    private float lookSpeedX = 2f;
+
+    [SerializeField, Range(1, 10)]
+    private float lookSpeedY = 2f;
+
+    [SerializeField, Range(1, 180)]
+    private float upperLookLimit = 88f;
+
+    [SerializeField, Range(1, 180)]
+    private float lowerLookLimit = 88f;
 
     [Header("Health Parameters")]
-    [SerializeField] private float maxHealth = 100f;
-    [SerializeField] private float timeBeforeRegenStarts = 3f;
-    [SerializeField] private float healthValueIncrement = 1f;
-    [SerializeField] private float healthTimeIncrement = 0.1f;
+    [SerializeField]
+    private float maxHealth = 100f;
+
+    [SerializeField]
+    private float timeBeforeRegenStarts = 3f;
+
+    [SerializeField]
+    private float healthValueIncrement = 1f;
+
+    [SerializeField]
+    private float healthTimeIncrement = 0.1f;
     private float currentHealth;
     private Coroutine regeneratingHealth;
     public static Action<float> OnTakeDamage;
@@ -55,39 +101,74 @@ public class FirstPersonController : MonoBehaviour {
     public static Action<float> OnHeal;
 
     [Header("Jumping Parameters")]
-    [SerializeField] private float jumpForce = 8f;
-    [SerializeField] private float gravity = 30f;
+    [SerializeField]
+    private float jumpForce = 8f;
+
+    [SerializeField]
+    private float gravity = 30f;
 
     [Header("Crouch Parameters")]
-    [SerializeField] private float crouchHeight = 0.5f;
-    [SerializeField] private float standingHeight = 2f;
-    [SerializeField] private float timeToCrouch = 0.25f;
-    [SerializeField] private Vector3 crouchingCenter = new Vector3(0f, 0.5f, 0f);
-    [SerializeField] private Vector3 standingCenter = new Vector3(0f, 0f, 0f);
+    [SerializeField]
+    private float crouchHeight = 0.5f;
+
+    [SerializeField]
+    private float standingHeight = 2f;
+
+    [SerializeField]
+    private float timeToCrouch = 0.25f;
+
+    [SerializeField]
+    private Vector3 crouchingCenter = new Vector3(0f, 0.5f, 0f);
+
+    [SerializeField]
+    private Vector3 standingCenter = new Vector3(0f, 0f, 0f);
     private bool isCrouching;
     private bool duringCrouchAnimation;
 
     [Header("Headbob Parameters")]
-    [SerializeField] private float walkBobSpeed = 14f;
-    [SerializeField] private float walkBobAmount = 0.05f;
-    [SerializeField] private float sprintBobSpeed = 18f;
-    [SerializeField] private float sprintBobAmount = 0.1f;
-    [SerializeField] private float crouchBobSpeed = 8f;
-    [SerializeField] private float crouchBobAmount = 0.025f;
+    [SerializeField]
+    private float walkBobSpeed = 14f;
+
+    [SerializeField]
+    private float walkBobAmount = 0.05f;
+
+    [SerializeField]
+    private float sprintBobSpeed = 18f;
+
+    [SerializeField]
+    private float sprintBobAmount = 0.1f;
+
+    [SerializeField]
+    private float crouchBobSpeed = 8f;
+
+    [SerializeField]
+    private float crouchBobAmount = 0.025f;
     private float defaultYPos = 0;
     private float timer;
     private float minimumMovementToBob = 2f;
 
     [Header("Zoom Parameters")]
-    [SerializeField] private float timeToZoom = 0.1f;
-    [SerializeField] private float zoomFOV = 30f;
+    [SerializeField]
+    private float timeToZoom = 0.1f;
+
+    [SerializeField]
+    private float zoomFOV = 30f;
 
     [Header("Dynamic FOV Parameters")]
-    [SerializeField] private float sprintFOV = 85f;
-    [SerializeField] private float timeToSprintFOV = 0.2f;
-    [SerializeField] private float fallFOV = 75f;
-    [SerializeField] private float timeToFallFOV = 1f;
-    [SerializeField] private float timeToDynamic = 0.2f;
+    [SerializeField]
+    private float sprintFOV = 85f;
+
+    [SerializeField]
+    private float timeToSprintFOV = 0.2f;
+
+    [SerializeField]
+    private float fallFOV = 75f;
+
+    [SerializeField]
+    private float timeToFallFOV = 1f;
+
+    [SerializeField]
+    private float timeToDynamic = 0.2f;
     private float timeToStopFallFOV = 0.05f;
     private float minimumMovementToSprintFOV = 0.1f;
     private float minimumMovementToFallFOV = 10f;
@@ -96,33 +177,45 @@ public class FirstPersonController : MonoBehaviour {
     private float defaultFOV;
     private int whatFOV = 0; // 0 for default
     private Coroutine fovRoutine;
-    
+
     // Sliding Params
     private Vector3 hitPointNormal;
     private float groundRayLength = 2f;
-    private bool IsSliding { 
-        get {  // PLEASE ADD CHECK TO SEE IF THE SLOPE IS GREATER THEN THE STEP HEIGHT. CURRENTLY THE PLAYER CANNOT MOVE IF CAUGHT ON TINY BUMP
-            if(characterController.isGrounded && Physics.Raycast(transform.position, Vector3.down, out RaycastHit slopeHit, groundRayLength)) {
+    private bool IsSliding
+    {
+        get
+        { // PLEASE ADD CHECK TO SEE IF THE SLOPE IS GREATER THEN THE STEP HEIGHT. CURRENTLY THE PLAYER CANNOT MOVE IF CAUGHT ON TINY BUMP
+            if (
+                characterController.isGrounded
+                && Physics.Raycast(
+                    transform.position,
+                    Vector3.down,
+                    out RaycastHit slopeHit,
+                    groundRayLength
+                )
+            )
+            {
                 hitPointNormal = slopeHit.normal;
                 return Vector3.Angle(hitPointNormal, Vector3.up) > characterController.slopeLimit;
-            } else {
+            }
+            else
+            {
                 return false;
             }
         }
     }
 
     [Header("Interaction")]
-    [SerializeField] private Vector3 interactionRayPoint = default;
-    [SerializeField] private float interactionDistance = default;
-    [SerializeField] private LayerMask interactionLayer = default;
+    [SerializeField]
+    private Vector3 interactionRayPoint = default;
+
+    [SerializeField]
+    private float interactionDistance = default;
+
+    [SerializeField]
+    private LayerMask interactionLayer = default;
     private Interactable currentInteractable;
     private int interactableLayer = 6;
-
-    [Header("Items")]
-    [SerializeField] private int maxHealthPackCarry = 5;
-    [SerializeField] private int maxGernadeCarry = 5;
-    private int countHealthPacks = 0;
-    private int countGernades = 0;
 
     // [NOTE] variables should always be private, public variables can be modified by anything at any time, causing bugs in the Unity game engine
     // [NOTE] variables that need to be publically available use getter setter method as seen above
@@ -134,15 +227,18 @@ public class FirstPersonController : MonoBehaviour {
 
     private float rotationX = 0;
 
-    private void OnEnable() {
+    private void OnEnable()
+    {
         OnTakeDamage += ApplyDamage;
     }
 
-    private void OnDisable() {
+    private void OnDisable()
+    {
         OnTakeDamage -= ApplyDamage;
     }
 
-    private void Awake() {
+    private void Awake()
+    {
         // get the camera attacked to the object
         playerCamera = GetComponentInChildren<Camera>();
         // get the character controller componant attached to the object
@@ -158,12 +254,14 @@ public class FirstPersonController : MonoBehaviour {
         Cursor.visible = false;
     }
 
-    private void Update() {
+    private void Update()
+    {
         // if the player is allowed to move, handle user input > handle mouse input > handle jumping > output
-        if (CanMove) {
+        if (CanMove)
+        {
             HandleMovementInput();
             HandleMouseLook();
-            if(canJump)
+            if (canJump)
                 HandleJump();
 
             if (canCrouch)
@@ -175,36 +273,41 @@ public class FirstPersonController : MonoBehaviour {
             if (canZoom)
                 HandleFOV();
 
-            if (canInteract) {
+            if (canInteract)
+            {
                 HandleInteractionCheck();
                 HandleInteractionInput();
             }
 
-            if (canUseItems)
-                HandleItems();
-            
             ApplyFinalMovements();
         }
     }
 
-    private void HandleItems() {
-        
-    }
-
-    private void HandleMovementInput() {
+    private void HandleMovementInput()
+    {
         // create a 2d array for x and z movement
         // (bool ? foo1 : foo2) - checks the bool, if true uses first option, if false uses second option
-        speed = isCrouching ? crouchSpeed : IsSprinting ? sprintSpeed : walkSpeed;
-        currentInput = new Vector2(speed * Input.GetAxis("Vertical"), speed * Input.GetAxis("Horizontal"));
+        speed = isCrouching
+            ? crouchSpeed
+            : IsSprinting
+                ? sprintSpeed
+                : walkSpeed;
+        currentInput = new Vector2(
+            speed * Input.GetAxis("Vertical"),
+            speed * Input.GetAxis("Horizontal")
+        );
 
         float moveDirectionY = moveDirection.y;
         // setup a vector3 for 2d movement
-        moveDirection = (transform.TransformDirection(Vector3.forward) * currentInput.x) + (transform.TransformDirection(Vector3.right) * currentInput.y);
+        moveDirection =
+            (transform.TransformDirection(Vector3.forward) * currentInput.x)
+            + (transform.TransformDirection(Vector3.right) * currentInput.y);
         // handle vertical movement seperatly
-        moveDirection.y = moveDirectionY; 
+        moveDirection.y = moveDirectionY;
     }
 
-    private void HandleMouseLook() {
+    private void HandleMouseLook()
+    {
         // [NOTE] rotations and translations work diffrent
         // [NOTE] rotating around the Y is the same as spinning the camera around a vertical pole
         // [NOTE] to make the camera ROTATE up if the mouse TRANSLATES up the X and Y must be swapped
@@ -216,31 +319,61 @@ public class FirstPersonController : MonoBehaviour {
         playerCamera.transform.localRotation = Quaternion.Euler(rotationX, 0, 0);
         // rotate the player to turn left and right
         transform.rotation *= Quaternion.Euler(0, Input.GetAxis("Mouse X") * lookSpeedX, 0);
-
     }
 
-    private void HandleJump () {
+    private void HandleJump()
+    {
         if (ShouldJump)
             moveDirection.y = jumpForce;
     }
 
-    private void HandleCrouch() {
-        if(ShouldCrouch)
+    private void HandleCrouch()
+    {
+        if (ShouldCrouch)
             StartCoroutine(CrouchStand());
     }
 
-    private void HandleHeadbob() {
-        if(!characterController.isGrounded) return;
+    private void HandleHeadbob()
+    {
+        if (!characterController.isGrounded)
+            return;
 
         // smooth stop fix by zombiemollusk7953
-        if (Mathf.Abs(new Vector2(characterController.velocity.x, characterController.velocity.z).magnitude) > minimumMovementToBob || (Mathf.Abs(defaultYPos - playerCamera.transform.localPosition.y) > 0.005f)) {
-            timer += Time.deltaTime * (isCrouching ? crouchBobSpeed : IsSprinting ? sprintBobSpeed : walkBobSpeed);
+        if (
+            Mathf.Abs(
+                new Vector2(
+                    characterController.velocity.x,
+                    characterController.velocity.z
+                ).magnitude
+            ) > minimumMovementToBob
+            || (Mathf.Abs(defaultYPos - playerCamera.transform.localPosition.y) > 0.005f)
+        )
+        {
+            timer +=
+                Time.deltaTime
+                * (
+                    isCrouching
+                        ? crouchBobSpeed
+                        : IsSprinting
+                            ? sprintBobSpeed
+                            : walkBobSpeed
+                );
             playerCamera.transform.localPosition = new Vector3(
                 playerCamera.transform.localPosition.x,
-                defaultYPos + Mathf.Sin(timer) * (isCrouching ? crouchBobAmount : IsSprinting ? sprintBobAmount : walkBobAmount),
+                defaultYPos
+                    + Mathf.Sin(timer)
+                        * (
+                            isCrouching
+                                ? crouchBobAmount
+                                : IsSprinting
+                                    ? sprintBobAmount
+                                    : walkBobAmount
+                        ),
                 playerCamera.transform.localPosition.z
             );
-        } else if (playerCamera.transform.localPosition.y != defaultYPos) {
+        }
+        else if (playerCamera.transform.localPosition.y != defaultYPos)
+        {
             playerCamera.transform.localPosition = new Vector3(
                 playerCamera.transform.localPosition.x,
                 defaultYPos,
@@ -261,24 +394,30 @@ public class FirstPersonController : MonoBehaviour {
         */
     }
 
-
-    private void HandleFOV() {
+    private void HandleFOV()
+    {
         // whatFOV does not need a specific number but needs to be diffrent for every check
         // sprintingFOV
-        if (IsSprinting && moveDirection.x > minimumMovementToSprintFOV && canDynamicFOV) {
-            if (whatFOV == 2) return;
-            if(fovRoutine != null) {
+        if (IsSprinting && moveDirection.x > minimumMovementToSprintFOV && canDynamicFOV)
+        {
+            if (whatFOV == 2)
+                return;
+            if (fovRoutine != null)
+            {
                 StopCoroutine(fovRoutine);
                 fovRoutine = null;
             }
 
             whatFOV = 2;
             fovRoutine = StartCoroutine(ToggleFOV(sprintFOV, timeToSprintFOV));
-        }  
+        }
         // zooming FOV
-        else if (Input.GetKey(zoomKey) && !IsSprinting) {
-            if (whatFOV == 1) return;
-            if(fovRoutine != null) {
+        else if (Input.GetKey(zoomKey) && !IsSprinting)
+        {
+            if (whatFOV == 1)
+                return;
+            if (fovRoutine != null)
+            {
                 StopCoroutine(fovRoutine);
                 fovRoutine = null;
             }
@@ -287,9 +426,12 @@ public class FirstPersonController : MonoBehaviour {
             fovRoutine = StartCoroutine(ToggleFOV(zoomFOV, timeToZoom));
         }
         // falling FOV
-        else if (characterController.velocity.y < -minimumMovementToFallFOV && canDynamicFOV) {
-            if (whatFOV == 3) return;
-            if(fovRoutine != null) {
+        else if (characterController.velocity.y < -minimumMovementToFallFOV && canDynamicFOV)
+        {
+            if (whatFOV == 3)
+                return;
+            if (fovRoutine != null)
+            {
                 StopCoroutine(fovRoutine);
                 fovRoutine = null;
             }
@@ -297,52 +439,86 @@ public class FirstPersonController : MonoBehaviour {
             whatFOV = 3;
             fovRoutine = StartCoroutine(ToggleFOV(fallFOV, timeToFallFOV));
         }
-        else if (whatFOV != 0) {
-            if(fovRoutine != null) {
+        else if (whatFOV != 0)
+        {
+            if (fovRoutine != null)
+            {
                 StopCoroutine(fovRoutine);
                 fovRoutine = null;
             }
 
-            if (whatFOV == 1) {
+            if (whatFOV == 1)
+            {
                 fovRoutine = StartCoroutine(ToggleFOV(defaultFOV, timeToZoom));
-            } else if (whatFOV == 3) {
+            }
+            else if (whatFOV == 3)
+            {
                 fovRoutine = StartCoroutine(ToggleFOV(defaultFOV, timeToStopFallFOV));
-            } else {
+            }
+            else
+            {
                 fovRoutine = StartCoroutine(ToggleFOV(defaultFOV, timeToDynamic));
             }
             whatFOV = 0;
         }
     }
 
-    private void HandleInteractionCheck() {
-        if(Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint), out RaycastHit hit, interactionDistance) && hit.collider.gameObject.layer == interactableLayer) {
-            if(hit.collider.gameObject.layer == interactableLayer && (currentInteractable == null || hit.collider.gameObject.GetInstanceID() != currentInteractable.gameObject.GetInstanceID())) { // the number is refrencing the Interactable game layer
+    private void HandleInteractionCheck()
+    {
+        if (
+            Physics.Raycast(
+                playerCamera.ViewportPointToRay(interactionRayPoint),
+                out RaycastHit hit,
+                interactionDistance
+            )
+            && hit.collider.gameObject.layer == interactableLayer
+        )
+        {
+            if (
+                hit.collider.gameObject.layer == interactableLayer
+                && (
+                    currentInteractable == null
+                    || hit.collider.gameObject.GetInstanceID()
+                        != currentInteractable.gameObject.GetInstanceID()
+                )
+            )
+            { // the number is refrencing the Interactable game layer
                 hit.collider.TryGetComponent(out currentInteractable);
 
                 if (currentInteractable)
                     currentInteractable.OnFocus();
-            } 
+            }
         }
-        else if (currentInteractable) {
+        else if (currentInteractable)
+        {
             currentInteractable.OnLoseFocus();
             currentInteractable = null;
         }
     }
 
-    private void HandleInteractionInput() {
-        if(Input.GetKeyDown(interactKey) 
-            && currentInteractable != null 
-            && Physics.Raycast(playerCamera.ViewportPointToRay(interactionRayPoint), 
-            out RaycastHit hit, interactionDistance, interactionLayer)) {
+    private void HandleInteractionInput()
+    {
+        if (
+            Input.GetKeyDown(interactKey)
+            && currentInteractable != null
+            && Physics.Raycast(
+                playerCamera.ViewportPointToRay(interactionRayPoint),
+                out RaycastHit hit,
+                interactionDistance,
+                interactionLayer
+            )
+        )
+        {
             currentInteractable.OnInteract();
         }
     }
 
-    private void ApplyDamage(float dmg) {
+    private void ApplyDamage(float dmg)
+    {
         currentHealth -= dmg;
         OnDamage?.Invoke(currentHealth); // ?.Invoke only runs the action when the there is a listener
-        
-        if(currentHealth <= 0)
+
+        if (currentHealth <= 0)
             KillPlayer();
         else if (regeneratingHealth != null)
             StopCoroutine(regeneratingHealth);
@@ -350,30 +526,35 @@ public class FirstPersonController : MonoBehaviour {
         regeneratingHealth = StartCoroutine(RegenerateHealth());
     }
 
-    private void KillPlayer() {
+    private void KillPlayer()
+    {
         currentHealth = 0;
         OnDamage?.Invoke(currentHealth);
 
-        if(regeneratingHealth != null)
+        if (regeneratingHealth != null)
             StopCoroutine(regeneratingHealth);
 
         print("DEAD");
     }
 
-    private void ApplyFinalMovements() {
+    private void ApplyFinalMovements()
+    {
         if (!characterController.isGrounded)
             moveDirection.y -= gravity * Time.deltaTime;
 
-        if(willSlideOnSlopes && IsSliding)
-            moveDirection += new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSpeed;
+        if (willSlideOnSlopes && IsSliding)
+            moveDirection +=
+                new Vector3(hitPointNormal.x, -hitPointNormal.y, hitPointNormal.z) * slopeSpeed;
 
         characterController.Move(moveDirection * Time.deltaTime);
     }
 
     // [NOTE] code here can be used for switching between two vales over time
-    private IEnumerator CrouchStand() {
+    private IEnumerator CrouchStand()
+    {
         // simple check to see if anything is above when attempting to stand
-        if (isCrouching && Physics.Raycast(playerCamera.transform.position, Vector3.up, 1f)) {
+        if (isCrouching && Physics.Raycast(playerCamera.transform.position, Vector3.up, 1f))
+        {
             yield break;
         }
 
@@ -393,9 +574,18 @@ public class FirstPersonController : MonoBehaviour {
         // while (time < animationLength)
         // foo = Mathf.Lerp(current, target, time/animationLength)
         // [NOTE] Mathf.Lerp(start, end, time) - Linearly interpolates between the start and end for time
-        while(timeElapsed < timeToCrouch) {
-            characterController.height = Mathf.Lerp(currentHeight, targetHeight, timeElapsed/timeToCrouch);
-            characterController.center = Vector3.Lerp(currentCenter, targetCenter, timeElapsed/timeToCrouch);
+        while (timeElapsed < timeToCrouch)
+        {
+            characterController.height = Mathf.Lerp(
+                currentHeight,
+                targetHeight,
+                timeElapsed / timeToCrouch
+            );
+            characterController.center = Vector3.Lerp(
+                currentCenter,
+                targetCenter,
+                timeElapsed / timeToCrouch
+            );
             timeElapsed += Time.deltaTime;
             yield return null;
         }
@@ -412,12 +602,14 @@ public class FirstPersonController : MonoBehaviour {
         duringCrouchAnimation = false;
     }
 
-    private IEnumerator ToggleFOV(float FOV, float timeToFOV) {
+    private IEnumerator ToggleFOV(float FOV, float timeToFOV)
+    {
         float targetFOV = FOV;
         float startingFOV = playerCamera.fieldOfView;
         float timeElapsed = 0;
 
-        while(timeElapsed < timeToFOV) {
+        while (timeElapsed < timeToFOV)
+        {
             playerCamera.fieldOfView = Mathf.Lerp(startingFOV, targetFOV, timeElapsed / timeToFOV);
             timeElapsed += Time.deltaTime;
             yield return null;
@@ -427,14 +619,16 @@ public class FirstPersonController : MonoBehaviour {
         fovRoutine = null;
     }
 
-    private IEnumerator RegenerateHealth() {
+    private IEnumerator RegenerateHealth()
+    {
         yield return new WaitForSeconds(timeBeforeRegenStarts);
         WaitForSeconds timeToWait = new WaitForSeconds(healthTimeIncrement);
 
-        while(currentHealth < maxHealth) {
+        while (currentHealth < maxHealth)
+        {
             currentHealth += healthValueIncrement;
 
-            if(currentHealth > maxHealth)
+            if (currentHealth > maxHealth)
                 currentHealth = maxHealth;
 
             OnHeal?.Invoke(currentHealth);
@@ -443,6 +637,4 @@ public class FirstPersonController : MonoBehaviour {
 
         regeneratingHealth = null;
     }
-
-    
 }

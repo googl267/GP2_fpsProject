@@ -351,11 +351,12 @@
 "Assets/Scritps/Boiler.cs"
 "Assets/Scritps/DamageTest.cs"
 "Assets/Scritps/FirstPersonController.cs"
-"Assets/Scritps/HealTest.cs"
-"Assets/Scritps/HealthPack.cs"
+"Assets/Scritps/Interactables/HealthPack.cs"
+"Assets/Scritps/Interactables/Item.cs"
+"Assets/Scritps/Interactables/interactable.cs"
+"Assets/Scritps/Interactables/testInteract.cs"
+"Assets/Scritps/Inventory/InventoryController.cs"
 "Assets/Scritps/UI.cs"
-"Assets/Scritps/interactable.cs"
-"Assets/Scritps/testInteract.cs"
 -langversion:9.0
 
 /deterministic
