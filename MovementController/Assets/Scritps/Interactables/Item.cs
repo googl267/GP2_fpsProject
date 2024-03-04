@@ -4,7 +4,8 @@ public class Item : Interactable
     public int Type { get; protected set; } = 0;
     public string Title { get; protected set; } = "Item";
     public float Weight { get; protected set; } = 10f;
-    public int Count { get; protected set; } = 1;
+    public int Amount { get; protected set; } = 1;
+    public bool Stackable { get; protected set; } = true;
 
     public override void OnFocus()
     {

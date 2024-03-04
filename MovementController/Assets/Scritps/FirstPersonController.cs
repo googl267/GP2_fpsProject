@@ -39,6 +39,9 @@ public class FirstPersonController : MonoBehaviour
     [SerializeField]
     private bool canInteract = true;
 
+    [SerializeField]
+    private bool canUseQuickActions = true;
+
     [Header("Controls")]
     [SerializeField]
     private KeyCode sprintKey = KeyCode.LeftShift;
@@ -53,7 +56,10 @@ public class FirstPersonController : MonoBehaviour
     private KeyCode zoomKey = KeyCode.Mouse1;
 
     [SerializeField]
-    private KeyCode interactKey = KeyCode.Mouse0;
+    private KeyCode interactKey = KeyCode.F;
+
+    [SerializeField]
+    private KeyCode healthKey = KeyCode.H;
 
     [Header("Movement Parameters")]
     private float speed;
@@ -116,6 +122,8 @@ public class FirstPersonController : MonoBehaviour
         public int type;
         public string title;
         public float weight;
+        public int amount;
+        public bool stackable;
     }
 
     [Header("Jumping Parameters")]
@@ -297,6 +305,11 @@ public class FirstPersonController : MonoBehaviour
             {
                 HandleInteractionCheck();
                 HandleInteractionInput();
+            }
+
+            if (canUseQuickActions)
+            {
+                HandleQuickActions();
             }
 
             ApplyFinalMovements();
@@ -554,12 +567,14 @@ public class FirstPersonController : MonoBehaviour
         if (regeneratingHealth != null)
             StopCoroutine(regeneratingHealth);
 
+        canUseQuickActions = false;
+
         print("DEAD");
     }
 
     public void AttemptPickUp(Item itemRef)
     {
-        if (currentWeight + (itemRef.Weight * itemRef.Count) > maxWeight)
+        if (currentWeight + (itemRef.Weight * itemRef.Amount) > maxWeight)
             return;
 
         ItemData temp = new ItemData();
@@ -567,8 +582,29 @@ public class FirstPersonController : MonoBehaviour
         temp.type = itemRef.Type;
         temp.title = itemRef.Title;
         temp.weight = itemRef.Weight;
-        InventoryList.Add(temp);
-        currentWeight += itemRef.Weight;
+        temp.amount = itemRef.Amount;
+        temp.stackable = itemRef.Stackable;
+
+        if (!itemRef.Stackable)
+        {
+            InventoryList.Add(temp);
+        }
+        else
+        {
+            bool inInv = false;
+            for (int i = 0; i < InventoryList.Count; i++)
+            {
+                if (InventoryList[i].id == itemRef.ID && InventoryList[i].type == itemRef.Type)
+                {
+                    InventoryList[i].amount += itemRef.Amount;
+                    inInv = true;
+                    break;
+                }
+            }
+            if (!inInv)
+                InventoryList.Add(temp);
+        }
+        HandleWeight();
         Destroy(itemRef.gameObject);
         print(
             "PICKED UP ITEM - TOTAL ITEMS: "
@@ -576,6 +612,49 @@ public class FirstPersonController : MonoBehaviour
                 + " - NEW ITEM NAME: "
                 + InventoryList[InventoryList.Count - 1].title
         );
+    }
+
+    private void HandleQuickActions()
+    {
+        if (Input.GetKeyDown(healthKey))
+        {
+            for (int i = 0; i < InventoryList.Count; i++)
+            {
+                if (InventoryList[i].id == 3)
+                {
+                    if (currentHealth < maxHealth)
+                    {
+                        currentHealth += 10;
+
+                        InventoryList[i].amount -= 1;
+                        if (InventoryList[i].amount <= 0)
+                            InventoryList.RemoveAt(i);
+
+                        if (currentHealth > maxHealth)
+                            currentHealth = maxHealth;
+
+                        HandleWeight();
+                        OnDamage?.Invoke(currentHealth);
+                        print("USED HEALTH PACK - CURRENT HEALTH: " + currentHealth);
+                        return;
+                    }
+                    print("AT FULL HEALTH");
+                    return;
+                }
+            }
+            print("NO HEALTH PACKS");
+        }
+    }
+
+    private void HandleWeight()
+    {
+        Debug.Log(InventoryList);
+        float tempWeight = 0;
+        for (int i = 0; i < InventoryList.Count; i++)
+        {
+            tempWeight += InventoryList[i].weight * InventoryList[i].amount;
+        }
+        currentWeight = tempWeight;
     }
 
     private void ApplyFinalMovements()

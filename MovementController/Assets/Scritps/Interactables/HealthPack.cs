@@ -6,6 +6,6 @@ public class HealthPack : Item
         Type = 0;
         Title = "Health Pack";
         Weight = 5f;
-        Count = 1;
+        Amount = 1;
     }
 }

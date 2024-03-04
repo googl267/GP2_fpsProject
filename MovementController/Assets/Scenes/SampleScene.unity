@@ -2898,11 +2898,13 @@ MonoBehaviour:
   canZoom: 1
   canDynamicFOV: 1
   canInteract: 1
+  canUseQuickActions: 1
   sprintKey: 304
   jumpKey: 32
   crouchKey: 99
   zoomKey: 324
   interactKey: 323
+  healthKey: 104
   walkSpeed: 3
   sprintSpeed: 6
   crouchSpeed: 1.5
@@ -2912,7 +2914,7 @@ MonoBehaviour:
   upperLookLimit: 80
   lowerLookLimit: 80
   maxHealth: 100
-  timeBeforeRegenStarts: 3
+  timeBeforeRegenStarts: 25
   healthValueIncrement: 1
   healthTimeIncrement: 0.1
   maxWeight: 15
