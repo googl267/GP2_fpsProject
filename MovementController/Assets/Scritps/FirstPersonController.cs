@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class FirstPersonController : MonoBehaviour
@@ -101,16 +102,20 @@ public class FirstPersonController : MonoBehaviour
     public static Action<float> OnHeal;
 
     [Header("Inventory Properties")]
-    [SerializeField] private float maxWeight = 50;
+    [SerializeField]
+    private float maxWeight = 50;
     private float currentWeight = 0;
     public static Action<Item> OnPickedUpAttempt;
 
+    public static List<ItemData> InventoryList = new List<ItemData>();
+
     [Serializable]
-    public class ItemData {
-        public string id;
-        public string name;
-        public string weight;
-        public string count;
+    public class ItemData
+    {
+        public int id; // 4 is armor, 3 is health, 2 is throwables, 1 is secondary guns, 0 is primary guns
+        public int type;
+        public string title;
+        public float weight;
     }
 
     [Header("Jumping Parameters")]
@@ -552,15 +557,25 @@ public class FirstPersonController : MonoBehaviour
         print("DEAD");
     }
 
-    public void AttemptPickUp(Item itemRef) {
-        if (currentWeight + itemRef.weight > maxWeight) {
-            print("NO SPARE WEIGHT");
+    public void AttemptPickUp(Item itemRef)
+    {
+        if (currentWeight + (itemRef.Weight * itemRef.Count) > maxWeight)
             return;
-        }
 
-        currentWeight += itemRef.weight;
+        ItemData temp = new ItemData();
+        temp.id = itemRef.ID;
+        temp.type = itemRef.Type;
+        temp.title = itemRef.Title;
+        temp.weight = itemRef.Weight;
+        InventoryList.Add(temp);
+        currentWeight += itemRef.Weight;
         Destroy(itemRef.gameObject);
-        print("PICKED UP ITEM");
+        print(
+            "PICKED UP ITEM - TOTAL ITEMS: "
+                + InventoryList.Count
+                + " - NEW ITEM NAME: "
+                + InventoryList[InventoryList.Count - 1].title
+        );
     }
 
     private void ApplyFinalMovements()
