@@ -354,6 +354,7 @@
 "Assets/Scritps/Interactables/HealthPack.cs"
 "Assets/Scritps/Interactables/Interactable.cs"
 "Assets/Scritps/Interactables/Item.cs"
+"Assets/Scritps/Interactables/ORB_Item.cs"
 "Assets/Scritps/Interactables/testInteract.cs"
 "Assets/Scritps/UI.cs"
 -langversion:9.0

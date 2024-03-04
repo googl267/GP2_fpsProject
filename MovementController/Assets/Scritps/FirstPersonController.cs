@@ -606,12 +606,6 @@ public class FirstPersonController : MonoBehaviour
         }
         HandleWeight();
         Destroy(itemRef.gameObject);
-        print(
-            "PICKED UP ITEM - TOTAL ITEMS: "
-                + InventoryList.Count
-                + " - NEW ITEM NAME: "
-                + InventoryList[InventoryList.Count - 1].title
-        );
     }
 
     private void HandleQuickActions()
@@ -625,8 +619,8 @@ public class FirstPersonController : MonoBehaviour
                     if (currentHealth < maxHealth)
                     {
                         currentHealth += 10;
-
                         InventoryList[i].amount -= 1;
+                        
                         if (InventoryList[i].amount <= 0)
                             InventoryList.RemoveAt(i);
 
@@ -648,13 +642,16 @@ public class FirstPersonController : MonoBehaviour
 
     private void HandleWeight()
     {
-        Debug.Log(InventoryList);
+        print("-----------------------------------------");
         float tempWeight = 0;
         for (int i = 0; i < InventoryList.Count; i++)
         {
             tempWeight += InventoryList[i].weight * InventoryList[i].amount;
+            print(InventoryList[i].title + ": " + InventoryList[i].amount);
         }
         currentWeight = tempWeight;
+        print("Weight: " + currentWeight);
+        print("-----------------------------------------");
     }
 
     private void ApplyFinalMovements()
