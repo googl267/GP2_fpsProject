@@ -34,7 +34,7 @@ Code should be formatted with [C Sharpier](https://csharpier.com/)
 - vector3s should start with "center", "position", or "direction"
 
 #### Functions
-- Pascal Snake Case (Function_Name)
+- Pascal Case (Function_Name)
 - Functions that return a value should start with "Get"
 - Functions that take an input should start with "Set"
 - Functions that change global variables should start with "Apply"
