@@ -48,9 +48,10 @@ GP2_fpsProject
       │  │  └── Shaders
       │  ├── Docs
       │  └── Level
-      │     ├── Prefabs
-      │     ├── Scenes
-      │     └── UI
+      │  │  ├── Prefabs
+      │  │  ├── Scenes
+      │  │  └── UI
+      │  └── External
       └── Thirdparty
 ```
 
