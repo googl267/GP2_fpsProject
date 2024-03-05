@@ -23,6 +23,37 @@
   - [ ] Weapon Variety
 
 
+## File Structure
+- **Based on [Unitys Guidlines](https://unity.com/how-to/organizing-your-project)**
+- Folders should not include spaces
+- organize files by username
+- Folder names should follow PascelCase and attempt to be a single word
+- Empty folders require a `.keep` file to avoid errors with git
+- Avoid underscores, spaces, and hyphens, naming assets should follow PascelCase
+- Create new scenes when working on a new focus
+```
+GP2_fpsProject
+└── [...] 
+   └── Assets
+      ├── USERNAME
+      │  ├── Art
+      │  │  ├── Materials
+      │  │  ├── Models
+      │  │  └── Textures
+      │  ├── Audio
+      │  │  ├── Music
+      │  │  └── Sound
+      │  ├── Code
+      │  │  ├── Scripts
+      │  │  └── Shaders
+      │  ├── Docs
+      │  └── Level
+      │     ├── Prefabs
+      │     ├── Scenes
+      │     └── UI
+      └── Thirdparty
+```
+
 ## Formatting
 Code should be formatted with [C Sharpier](https://csharpier.com/)
 
@@ -34,7 +65,7 @@ Code should be formatted with [C Sharpier](https://csharpier.com/)
 - vector3s should start with "center", "position", or "direction"
 
 #### Functions
-- Pascal Case (Function_Name)
+- Pascal Case (FunctionName)
 - Functions that return a value should start with "Get"
 - Functions that take an input should start with "Set"
 - Functions that change global variables should start with "Apply"
@@ -123,5 +154,5 @@ Code should be formatted with [C Sharpier](https://csharpier.com/)
   
   - Make sure your in your project directory on the right branch
   - To sync run ` git pull `
-  - To commit run ` git add -A; git commit -m "YOUR MESSAGE"; git push origin testing `
+  - To commit run ` git add -A; git commit -m "YOUR MESSAGE"; git push origin [branch] `
 </details>
