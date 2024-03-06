@@ -3,16 +3,24 @@
 
 ## Progress
 - 0.0.0: created unity project
-- 0.0.9: created player controller, guns, basic enemy AI
+- 0.0.4: created player controller, enemy behaviour tree, simple raycast gun, and iventory system WIP
+
+#### 0.1.0 Todo
+- fix player controller slope sliding on small edges
+- re-implement guns
+- inventory actions and management
+- modular check inventory function
 
 #### Timeline
   - [X] Movement
   - [X] Jump, Sprint, Crouch
-  - [ ] Health and Ammo
+  - [ ] Health
   - [ ] Weapon and Firing
+  - [ ] Ammo
   - [ ] Scope aim
+
   - [ ] Consumeable throw
-  - [ ] Health kit
+  - [X] Health kit
   
   - [ ] AI and Aim RNG
   
